@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Template.iml" filepath="$PROJECT_DIR$/Template.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aware-plugin-collapse-detector.iml" filepath="$PROJECT_DIR$/aware-plugin-collapse-detector.iml" />
-      <module fileurl="file://$PROJECT_DIR$/aware-plugin-template-master.iml" filepath="$PROJECT_DIR$/aware-plugin-template-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collapse_detector.iml" filepath="$PROJECT_DIR$/collapse_detector.iml" />
     </modules>
   </component>
 </project>
