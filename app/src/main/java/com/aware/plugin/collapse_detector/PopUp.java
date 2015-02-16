@@ -21,7 +21,7 @@ public class PopUp extends IntentService {
                 "'esm_title': 'Fall Detected (Yes/No)'," +
                 "'esm_instructions': 'Did you or your phone fell down?'," +
                 "'esm_quick_answers': ['No','Yes']," +
-                "'esm_expiration_threashold': 0," +
+                "'esm_expiration_threashold': 1200," +
                 "'esm_trigger': ''" +
                 "}}";
     }
