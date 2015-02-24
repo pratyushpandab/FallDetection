@@ -28,7 +28,8 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
     private static SensorManager mSensorManager = null;
     private static Sensor mAccelerometer = null;
 
-    private static final ESMStatusListener esm_statuses = new ESMStatusListener();
+    private  final ESMStatusListener esm_statuses = new ESMStatusListener();
+    public static Intent intent2;
 
     @Override
     public void onCreate() {
@@ -98,7 +99,7 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
 
     }
 
-    public static class ESMStatusListener extends BroadcastReceiver {
+    public class ESMStatusListener extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
 
             if (intent.getAction().equals(ESM.ACTION_AWARE_ESM_DISMISSED))
@@ -112,6 +113,13 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
                     String ans = esm_answers.getString(esm_answers.getColumnIndex(ESM_Provider.ESM_Data.ANSWER));
 
                     Log.d(TAG, "User answer ----- " + ans);
+
+                    if (ans.equalsIgnoreCase("Yes")) {
+                        Log.d(TAG, "answer is yes, homescreen shows up");
+                        intent2 = new Intent(getApplicationContext(), Homescreen.class);
+                        intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent2);
+                    }
                     if (esm_answers != null && !esm_answers.isClosed()) esm_answers.close();
                 }
             }

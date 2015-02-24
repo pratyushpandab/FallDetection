@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">collapse_detector</string>
+    <string name="title_activity_homescreen">homescreen</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="API_KEY">AIzaSyBLJ9tXEwnUsV7EP66N13J7s_QXajfGwR4</string>
 </resources>
