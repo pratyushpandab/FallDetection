@@ -12,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -76,6 +77,9 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
             Toast.makeText(getApplicationContext(),"I fell down!", Toast.LENGTH_LONG).show();
             Log.d(TAG, "Vector sum: " + vector_sum);
             notifyUser();
+
+            // add code to send data to server
+            // Timestamp and GPS coordinates
         }
     }
 
@@ -116,9 +120,17 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
 
                     if (ans.equalsIgnoreCase("Yes")) {
                         Log.d(TAG, "answer is yes, homescreen shows up");
+                        //shows map UI
                         intent2 = new Intent(getApplicationContext(), Homescreen.class);
                         intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent2);
+
+                        //trying google maps
+//                        Intent intent3 = new Intent(android.content.Intent.ACTION_VIEW,
+//                                Uri.parse("http://maps.google.com/maps?daddr=60.1708, 24.9375"));
+//
+//                        startActivity(intent3);
+
                     }
                     if (esm_answers != null && !esm_answers.isClosed()) esm_answers.close();
                 }

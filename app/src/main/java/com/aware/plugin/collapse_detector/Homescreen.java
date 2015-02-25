@@ -5,6 +5,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -61,17 +63,22 @@ public class Homescreen extends FragmentActivity implements LocationListener {
         Log.d(TAG, "Latitude: " + latitude + ", Longitude: " + longitude);
         LatLng latLng = new LatLng(latitude, longitude);
         marker = googleMap.addMarker(new MarkerOptions().position(latLng));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(5));
 
-        double newLat = 13.7563;
-        double newLon = 100.5018;
-        LatLng newLatLng = new LatLng(newLat, newLon);
-        googleMap.addMarker(new MarkerOptions().position(newLatLng));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+        // to get the address
+        LocationAddress locationAddress = new LocationAddress();
+        locationAddress.getAddressFromLocation(latitude, longitude,
+        getApplicationContext(), new GeocoderHandler());
 
-        locationTv.setText("Latitude: " + new DecimalFormat("##.###").format(latitude) + ", Longitude: " + new DecimalFormat("##.###").format(longitude));
+//        double newLat = 13.7563;
+//        double newLon = 100.5018;
+//        LatLng newLatLng = new LatLng(newLat, newLon);
+//        googleMap.addMarker(new MarkerOptions().position(newLatLng));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+//        googleMap.animateCamera(CameraUpdateFactory.zoomTo(2));
+
+        //locationTv.setText("Latitude: " + new DecimalFormat("##.###").format(latitude) + ", Longitude: " + new DecimalFormat("##.###").format(longitude));
     }
 
 
@@ -81,6 +88,26 @@ public class Homescreen extends FragmentActivity implements LocationListener {
         getMenuInflater().inflate(R.menu.menu_homescreen, menu);
         return true;
     }
+
+
+    private class GeocoderHandler extends Handler {
+        @Override
+        public void handleMessage(Message message) {
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    break;
+                default:
+                    locationAddress = null;
+            }
+            TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
+            locationTv.setText(locationAddress);
+
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -96,8 +123,6 @@ public class Homescreen extends FragmentActivity implements LocationListener {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 
