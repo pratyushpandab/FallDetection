@@ -23,6 +23,13 @@ import com.aware.ESM;
 import com.aware.providers.ESM_Provider;
 import com.aware.utils.Aware_Plugin;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 
 public class Plugin extends Aware_Plugin implements SensorEventListener {
 
@@ -31,6 +38,12 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
 
     private  final ESMStatusListener esm_statuses = new ESMStatusListener();
     public static Intent intent2;
+
+
+    //server details
+    int UDP_SERVER_PORT = 80;
+    String UDP_SERVER_IP = "85.23.168.159";
+
 
     @Override
     public void onCreate() {
@@ -77,6 +90,9 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
             Toast.makeText(getApplicationContext(),"I fell down!", Toast.LENGTH_LONG).show();
             Log.d(TAG, "Vector sum: " + vector_sum);
             notifyUser();
+
+            // send data to server
+            new Thread(new Client()).start();
 
             // add code to send data to server
             // Timestamp and GPS coordinates
@@ -137,6 +153,53 @@ public class Plugin extends Aware_Plugin implements SensorEventListener {
             }
         }
     }
+
+
+    // sending data to server
+    public class Client implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                //current timestamp
+                Long timestamp = System.currentTimeMillis();
+
+                // Here we convert Java Object to JSON
+
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("timestamp", timestamp);
+
+
+
+
+                // Retrieve the ServerName
+                InetAddress serverAddr = InetAddress.getByName(UDP_SERVER_IP);
+                Log.d("UDP", "C: Connecting...");
+                //Create new UDP-Socket
+                DatagramSocket socket = new DatagramSocket();
+
+                //Prepare some data to be sent
+                byte[] buf = jsonObj.toString().getBytes();
+                //Create UDP-packet with data & destination(url+port)
+                DatagramPacket packet = new DatagramPacket(buf, buf.length, serverAddr, UDP_SERVER_PORT);
+                Log.d("UDP", "C: Sending: '" + new String(buf) + "'");
+
+                //Send out the packet */
+                socket.send(packet);
+                Log.d("UDP", "C: Sent.");
+                Log.d("UDP", "C: Done.");
+
+                socket.receive(packet);
+                Log.d("UDP", "C: Received: '" + new String(packet.getData()) + "'");
+
+            } catch (Exception e) {
+                Log.e("UDP", "C: Error", e);
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
     @Override
     public void onDestroy() {
